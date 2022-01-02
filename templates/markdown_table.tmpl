@@ -1,0 +1,82 @@
+<!-- BEGIN_ANSIBILA.GO -->
+{{ if not .Metadata.GalaxyInfo.RoleName }}
+# Ansible Role
+    {{- if not .Metadata.GalaxyInfo.Description -}}
+This role has a description.
+    {{ else }}
+{{ .Metadata.GalaxyInfo.Description -}}
+    {{ end }}
+{{ else }}
+# Ansible Role: {{ .Metadata.GalaxyInfo.RoleName }}
+    {{- if not .Metadata.GalaxyInfo.Description -}}
+This role has a description.
+    {{ else }}
+{{ .Metadata.GalaxyInfo.Description -}}
+    {{ end }}
+{{ end }}
+
+{{ if not .Metadata.GalaxyInfo.Platforms }}
+    {{- indent 0 "#" }} Platforms
+
+    General Platform.
+{{ else }}
+    {{- indent 0 "#" }} Platforms
+| Name | Version |
+|------|:-------:|
+    {{- range $i, $platform := .Metadata.GalaxyInfo.Platforms }}
+| {{ $platform.Name }} | {{ $platform.Versions }} |
+    {{- end }}
+{{ end }}
+
+{{ if not .Modules }}
+    {{- indent 0 "#" }} Modules
+
+    No Modules.
+{{ else }}
+    {{- indent 0 "#" }} Modules
+
+| Name | URL |
+|------|:---:|
+    {{- range $i, $module := .Modules }}
+| {{ $module.Name }} | {{ $module.FullURL }} |
+    {{- end }}
+{{ end }}
+
+{{ if not .Variables }}
+    {{- indent 0 "#" }} Variables
+
+    No Variables.
+{{ else }}
+    {{- indent 0 "#" }} Variables
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+    {{- range $i, $variable := .Variables }}
+| {{ anchorNameMarkdown "input" $variable.Name }} | {{ $variable.Description }} | {{ $variable.Type }} | {{ sanitize (tostring $variable.Value) }} | {{ ternary $variable.Required "yes" "no" }} |
+    {{- end }}
+{{ end }}
+
+{{ if not .Playbook }}
+    {{- indent 0 "#" }} Example Playbook
+
+    No Example Playbook.
+{{ else }}
+    {{- indent 0 "#" }} Example Playbook
+
+```
+    {{- range $i, $line := .Playbook }}
+{{ $line.Value }}
+    {{- end }}
+```
+{{ end }}
+
+{{ if not .Metadata.GalaxyInfo.License }}
+    {{- indent 0 "#" }} LICENSE
+
+    No License.
+{{ else }}
+    {{- indent 0 "#" }} LICENSE
+
+{{ .Metadata.GalaxyInfo.License }}
+{{ end }}
+<!-- END_ANSIBILA.GO -->
