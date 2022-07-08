@@ -10,8 +10,13 @@ func NewMarkdownCommand(ansibleVariable service.AnsibleVariable) *cobra.Command 
 	cmd := &cobra.Command{
 		Use:   "markdown",
 		Short: "Generate Markdown of variable inputs",
-		Run: func(cmd *cobra.Command, args []string) {
-			ansibleVariable.FindAll()
+		RunE: func(cmd *cobra.Command, args []string) error {
+			_, err := ansibleVariable.FindAll()
+			if err != nil{
+				return err
+			}
+
+			return nil
 		},
 	}
 

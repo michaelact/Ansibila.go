@@ -23,13 +23,15 @@ func Execute() {
 
 func init() {
 	path := config.Path{}
-
 	ansibleVariable := service.NewAnsibleVariable(&path)
 
-	rootCmd.AddCommand(NewMarkdownCommand(ansibleVariable))
-
 	flags := rootCmd.Flags()
-	flags.StringVarP(&path.Directory, "directory", "d", ".", "Root directory of ansible role")
 	flags.StringVarP(&path.Template, "template", "t", "", "Directory of template files")
 	flags.StringVarP(&path.Variable, "variable", "v", "variables.yaml", "Variable filepath")
+	flags.StringVarP(&path.Directory, "directory", "d", ".", "Root directory of ansible role")
+	if string(path.Directory[len(path.Directory)-1]) != "/" {
+		path.Directory += "/"
+	}
+
+	rootCmd.AddCommand(NewMarkdownCommand(ansibleVariable))
 }
